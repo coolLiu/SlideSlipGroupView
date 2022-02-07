@@ -44,6 +44,10 @@ class SlideSlipGroupView @JvmOverloads constructor(
         return list
     }
 
+    /**
+     * 通过bean的方式设置侧滑菜单
+     * 目前只提供了这一种添加的方式  后续会适配在xml文件中添加的方式
+     */
     fun setSlideData(list: ArrayList<SlideDataBean>) {
         this.list = list
         for (i in childCount - 1 downTo 0) {
@@ -64,10 +68,16 @@ class SlideSlipGroupView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 侧滑菜单是否打开
+     */
     fun isClosed(): Boolean {
         return scrollX == 0
     }
 
+    /**
+     * 侧滑菜单是否关闭
+     */
     fun isOpened(): Boolean {
         if (measuredWidth == 0) {
             return false
@@ -75,11 +85,18 @@ class SlideSlipGroupView @JvmOverloads constructor(
         return scrollX == mContentWidth - measuredWidth
     }
 
+    /**
+     * onMeasure方法目前还没有自适应功能 需要在xml文件中写死宽高
+     */
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        //TODO 适配wrapContent方式
         measureChildren(widthMeasureSpec, heightMeasureSpec)
     }
 
+    /**
+     * 将子view防止到viewGroup中  并计算出内容宽度
+     */
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         var layoutRight = right
         for (i in 0 until childCount) {
@@ -100,22 +117,21 @@ class SlideSlipGroupView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        Log.i("hahahahah", "onTouchEvent")
         if (event == null) return super.onTouchEvent(event)
         acquireVelocityTracker(event)
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
+            MotionEvent.ACTION_DOWN -> {//手指按下   清空所有信息并重新记录坐标
                 clearScrollMsg()
                 mStartX = event.x.toInt()
                 mStartY = event.y.toInt()
                 mLastX = event.x.toInt()
                 mLastY = event.y.toInt()
             }
-            MotionEvent.ACTION_MOVE -> {
+            MotionEvent.ACTION_MOVE -> {//手指移动时先判断初始的滑动方向  如果为横向处理事件并通知父布局不拦截
                 val slidX = mLastX - event.x.toInt()
                 mLastX = event.x.toInt()
                 mLastY = event.y.toInt()
-                if (scrollType == -1) {
+                if (scrollType == -1) {//判断是否初始化了滑动方向
                     initScrollType(mStartX, mStartY, mLastX, mLastY)
                 }
                 if (scrollType == 0) {//横滑时通知父布局不拦截事件
@@ -123,27 +139,28 @@ class SlideSlipGroupView @JvmOverloads constructor(
                     scrollDy(slidX)
                 }
             }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {//手指抬起时计算横滑下的滑动速度  判断是否需要根据惯性来展开或收起菜单
                 if (abs(mLastX - mStartX) <= configuration.scaledTouchSlop &&
                     abs(mLastY - mStartY) <= configuration.scaledTouchSlop
-                ) {
+                ) {//判断是否为点击事件
                     performClick()
                     recyclerVelocityTracker()
                     return true
                 }
-                velocityTracker!!.computeCurrentVelocity(
+                velocityTracker!!.computeCurrentVelocity(//计算滑动速度
                     1000,
                     configuration.scaledMaximumFlingVelocity.toFloat()
                 )
                 val xVelocity = velocityTracker!!.xVelocity
-                if (abs(xVelocity) > 500) {
+                if (abs(xVelocity) > 500) {//速度较快根据收起或展开菜单
                     animatorDuration = 100
                     if (xVelocity < 0) {
                         openSlideGroup()
                     } else {
                         closeSlideGroup()
                     }
-                } else {
+                } else {//速度较慢  恢复到菜单原先的状态  收起时的速度较慢  时间长一点
+                    animatorDuration = 200
                     val centerScrollX = (mContentWidth - measuredWidth) / 2
                     if (scrollX > centerScrollX) {
                         openSlideGroup()
@@ -159,6 +176,9 @@ class SlideSlipGroupView @JvmOverloads constructor(
         return true
     }
 
+    /**
+     * 记录用户手势
+     */
     private fun acquireVelocityTracker(event: MotionEvent) {
         if (velocityTracker == null) {
             velocityTracker = VelocityTracker.obtain()
@@ -166,6 +186,9 @@ class SlideSlipGroupView @JvmOverloads constructor(
         velocityTracker?.addMovement(event)
     }
 
+    /**
+     * 清空手势
+     */
     private fun recyclerVelocityTracker() {
         velocityTracker?.clear()
         velocityTracker?.recycle()
@@ -186,6 +209,10 @@ class SlideSlipGroupView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 展开菜单
+     * @param withAnimator 是否需要动画
+     */
     fun openSlideGroup(withAnimator: Boolean = true) {
         if (scrollX == mContentWidth - measuredWidth) {
             return
@@ -205,6 +232,10 @@ class SlideSlipGroupView @JvmOverloads constructor(
         mAnimator?.start()
     }
 
+    /**
+     * 收起菜单
+     * @param withAnimator 是否需要动画
+     */
     fun closeSlideGroup(withAnimator: Boolean = true) {
         if (scrollX == 0) {
             return
@@ -224,11 +255,17 @@ class SlideSlipGroupView @JvmOverloads constructor(
         mAnimator?.start()
     }
 
+    /**
+     * 取消动画
+     */
     private fun cancelAnimator() {
         mAnimator?.cancel()
         mAnimator = null
     }
 
+    /**
+     * 加载滑动方向
+     */
     private fun initScrollType(startX: Int, startY: Int, lastX: Int, lastY: Int) {
         if (scrollType != -1) return
         val deltaX = abs(lastX - startX)
@@ -243,6 +280,9 @@ class SlideSlipGroupView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 滑动方向为横向时再去拦截
+     */
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         if (ev == null) return super.onInterceptTouchEvent(ev)
         isIntercept = false
@@ -267,9 +307,6 @@ class SlideSlipGroupView @JvmOverloads constructor(
         scrollType = -1
     }
 
-    /**
-     *
-     */
     class SlideDataBean {
         var content: String by Delegates.notNull()
         var listener: (clickView: View, slideView: SlideSlipGroupView) -> Unit by Delegates.notNull()

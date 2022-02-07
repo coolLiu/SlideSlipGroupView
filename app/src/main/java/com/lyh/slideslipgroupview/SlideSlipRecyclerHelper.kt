@@ -6,11 +6,17 @@ import androidx.recyclerview.widget.RecyclerView
 /**
  * @Author lyh
  * @Date 2022/1/28
+ *
+ * 由于recyclerview的服用机制，导致滑动到其他的条目会展示之前的状态
+ * 创建一个helper解决这个问题
  **/
 class SlideSlipRecyclerHelper {
 
     private val slideSlipGroupViewList = ArrayList<SlideSlipGroupView>()
 
+    /**
+     * 需要触摸屏幕时关闭已展开的菜单时使用
+     */
     fun attachToRecyclerView(recyclerView: RecyclerView) {
         recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
@@ -39,6 +45,10 @@ class SlideSlipRecyclerHelper {
         })
     }
 
+    /**
+     * 在适配器中bind时调用
+     * TODO 适配item不一样的情况
+     */
     fun bindView(
         slideDataList: ArrayList<SlideSlipGroupView.SlideDataBean>,
         slideSlipGroupView: SlideSlipGroupView,
