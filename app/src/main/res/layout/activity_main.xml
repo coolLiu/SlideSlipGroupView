@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.lyh.slideslipgroupview.SlideSlipGroupView
+        android:id="@+id/slideSlipView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="哈哈哈哈"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="哈哈哈哈"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:text="哈哈哈哈"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </ScrollView>
+
+    </com.lyh.slideslipgroupview.SlideSlipGroupView>
+
+
+    <Button
+        android:id="@+id/btnOpen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="打开" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="关闭" />
+
+    <Button
+        android:id="@+id/btnIntent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="跳转" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>
