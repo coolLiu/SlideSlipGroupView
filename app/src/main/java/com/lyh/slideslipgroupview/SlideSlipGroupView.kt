@@ -3,7 +3,6 @@ package com.lyh.slideslipgroupview
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -31,6 +30,7 @@ class SlideSlipGroupView @JvmOverloads constructor(
     private var animatorDuration = 200
 
     private var list: ArrayList<SlideDataBean>? = null
+    var menuClickListenerList: ((view: View, menuPosition: Int, menuBean: SlideDataBean) -> Unit)? = null
     var positionInRecycler: Int = -1
 
     override fun onFinishInflate() {
@@ -55,15 +55,18 @@ class SlideSlipGroupView @JvmOverloads constructor(
             removeViewAt(i)
         }
         closeSlideGroup(false)
-        for (i in list) {
+
+        for ((index, item) in list.withIndex()) {
             val textView = TextView(context)
-            textView.text = i.content
-            textView.setOnClickListener { i.listener.invoke(textView, this) }
+            textView.text = item.content
+            textView.setOnClickListener {
+                menuClickListenerList?.invoke(it, index, item)
+            }
             textView.gravity = Gravity.CENTER
-            textView.setTextColor(i.textColor)
+            textView.setTextColor(item.textColor)
             textView.layoutParams =
-                FrameLayout.LayoutParams(i.width, FrameLayout.LayoutParams.MATCH_PARENT)
-            textView.setBackgroundColor(i.backGroundColor)
+                FrameLayout.LayoutParams(item.width, FrameLayout.LayoutParams.MATCH_PARENT)
+            textView.setBackgroundColor(item.backGroundColor)
             addView(textView)
         }
     }
@@ -298,7 +301,6 @@ class SlideSlipGroupView @JvmOverloads constructor(
                 initScrollType(mStartX, mStartY, mLastX, mLastY)
             }
         }
-        Log.i("hahahahah", "scrollType====${scrollType}")
         return scrollType == 0
     }
 
@@ -309,7 +311,6 @@ class SlideSlipGroupView @JvmOverloads constructor(
 
     class SlideDataBean {
         var content: String by Delegates.notNull()
-        var listener: (clickView: View, slideView: SlideSlipGroupView) -> Unit by Delegates.notNull()
         var textColor: Int by Delegates.notNull()
         var backGroundColor: Int by Delegates.notNull()
         var width: Int by Delegates.notNull()
@@ -318,18 +319,12 @@ class SlideSlipGroupView @JvmOverloads constructor(
     class SlideDataBuilder {
 
         private var content: String by Delegates.notNull()
-        private var listener: (clickView: View, slideView: SlideSlipGroupView) -> Unit by Delegates.notNull()
         private var textColor: Int by Delegates.notNull()
         private var backGroundColor: Int by Delegates.notNull()
         private var width: Int by Delegates.notNull()
 
         fun buildContent(content: String): SlideDataBuilder {
             this.content = content
-            return this
-        }
-
-        fun buildListener(listener: (clickView: View, slideView: SlideSlipGroupView) -> Unit): SlideDataBuilder {
-            this.listener = listener
             return this
         }
 
@@ -352,7 +347,6 @@ class SlideSlipGroupView @JvmOverloads constructor(
             val slideDataBean = SlideDataBean()
             slideDataBean.width = width
             slideDataBean.textColor = textColor
-            slideDataBean.listener = listener
             slideDataBean.content = content
             slideDataBean.backGroundColor = backGroundColor
             return slideDataBean

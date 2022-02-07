@@ -23,40 +23,31 @@ class RecyclerListActivity : AppCompatActivity() {
         mRecyclerContent.layoutManager = LinearLayoutManager(this)
         mRecyclerContent.adapter = mAdapter
 
-        val likeBean = SlideSlipGroupView.SlideDataBuilder()
-            .buildContent("点赞")
-            .buildListener { clickView, slideView ->
-                Toast.makeText(this, "点赞", Toast.LENGTH_SHORT).show()
-                slideView.closeSlideGroup()
-            }
-            .buildTextColor(Color.WHITE)
-            .buildBackGroundColor(resources.getColor(R.color.purple_200))
-            .buildWidth(200)
-            .build()
-
-        val collectBean = SlideSlipGroupView.SlideDataBuilder()
-            .buildContent("收藏")
-            .buildListener { clickView, slideView ->
-                Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show()
-            }
-            .buildTextColor(Color.WHITE)
-            .buildBackGroundColor(resources.getColor(R.color.teal_200))
-            .buildWidth(300)
-            .build()
-
-        val followBean = SlideSlipGroupView.SlideDataBuilder()
-            .buildContent("订阅")
-            .buildListener { clickView, slideView ->
-                Toast.makeText(this, "订阅", Toast.LENGTH_SHORT).show()
-            }
-            .buildTextColor(Color.WHITE)
-            .buildBackGroundColor(resources.getColor(R.color.teal_700))
-            .buildWidth(200)
-            .build()
-
-        val slideList = arrayListOf(likeBean, collectBean, followBean)
-
         for (i in 0..20) {
+
+            val likeBean = SlideSlipGroupView.SlideDataBuilder()
+                .buildContent("点赞")
+                .buildTextColor(Color.WHITE)
+                .buildBackGroundColor(resources.getColor(R.color.purple_200))
+                .buildWidth(200)
+                .build()
+
+            val collectBean = SlideSlipGroupView.SlideDataBuilder()
+                .buildContent("收藏")
+                .buildTextColor(Color.WHITE)
+                .buildBackGroundColor(resources.getColor(R.color.teal_200))
+                .buildWidth(300)
+                .build()
+
+            val followBean = SlideSlipGroupView.SlideDataBuilder()
+                .buildContent("订阅")
+                .buildTextColor(Color.WHITE)
+                .buildBackGroundColor(resources.getColor(R.color.teal_700))
+                .buildWidth(200)
+                .build()
+
+            val slideList = arrayListOf(likeBean, collectBean, followBean)
+
             val bean = AdapterBean()
             bean.slideDataList = slideList
             bean.content = "这是第${i + 1}条数据"
@@ -67,7 +58,4 @@ class RecyclerListActivity : AppCompatActivity() {
         mAdapter.notifyDataSetChanged()
     }
 
-    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        return super.dispatchTouchEvent(ev)
-    }
 }

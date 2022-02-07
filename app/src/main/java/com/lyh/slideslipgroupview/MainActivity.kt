@@ -29,9 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         val likeBean = SlideSlipGroupView.SlideDataBuilder()
             .buildContent("点赞")
-            .buildListener { clickView, slideView ->
-                Toast.makeText(this, "点赞", Toast.LENGTH_SHORT).show()
-            }
             .buildTextColor(Color.WHITE)
             .buildBackGroundColor(resources.getColor(R.color.purple_200))
             .buildWidth(200)
@@ -39,9 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         val collectBean = SlideSlipGroupView.SlideDataBuilder()
             .buildContent("收藏")
-            .buildListener { clickView, slideView ->
-                Toast.makeText(this, "收藏", Toast.LENGTH_SHORT).show()
-            }
             .buildTextColor(Color.WHITE)
             .buildBackGroundColor(resources.getColor(R.color.teal_200))
             .buildWidth(300)
@@ -49,15 +43,16 @@ class MainActivity : AppCompatActivity() {
 
         val followBean = SlideSlipGroupView.SlideDataBuilder()
             .buildContent("订阅")
-            .buildListener { clickView, slideView ->
-                Toast.makeText(this, "订阅", Toast.LENGTH_SHORT).show()
-            }
             .buildTextColor(Color.WHITE)
             .buildBackGroundColor(resources.getColor(R.color.teal_700))
             .buildWidth(200)
             .build()
 
         slideSlipGroupView.setSlideData(arrayListOf(likeBean, collectBean, followBean))
+
+        slideSlipGroupView.menuClickListenerList = { view, menuPosition, menuBean ->
+            Toast.makeText(this, "点击了${menuBean.content}", Toast.LENGTH_SHORT).show()
+        }
 
         tvContent.setOnClickListener {
             Toast.makeText(this, "hahahahha", Toast.LENGTH_SHORT).show()
