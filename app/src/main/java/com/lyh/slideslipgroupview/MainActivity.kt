@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         slideSlipGroupView.setSlideData(arrayListOf(likeBean, collectBean, followBean))
 
-        slideSlipGroupView.menuClickListenerList = { view, menuPosition, menuBean ->
+        slideSlipGroupView.setMenuClickListenerList{ view, menuPosition, menuBean ->
             Toast.makeText(this, "点击了${menuBean.content}", Toast.LENGTH_SHORT).show()
         }
 

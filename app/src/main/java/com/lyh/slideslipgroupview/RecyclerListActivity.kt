@@ -24,7 +24,6 @@ class RecyclerListActivity : AppCompatActivity() {
         mRecyclerContent.adapter = mAdapter
 
         for (i in 0..20) {
-
             val likeBean = SlideSlipGroupView.SlideDataBuilder()
                 .buildContent("点赞")
                 .buildTextColor(Color.WHITE)

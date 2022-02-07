@@ -30,8 +30,13 @@ class SlideSlipGroupView @JvmOverloads constructor(
     private var animatorDuration = 200
 
     private var list: ArrayList<SlideDataBean>? = null
-    var menuClickListenerList: ((view: View, menuPosition: Int, menuBean: SlideDataBean) -> Unit)? = null
+    private var menuClickListenerList: ((view: View, menuPosition: Int, menuBean: SlideDataBean) -> Unit)? =
+        null
     var positionInRecycler: Int = -1
+
+    fun setMenuClickListenerList(menuClickListenerList: (view: View, menuPosition: Int, menuBean: SlideDataBean) -> Unit) {
+        this.menuClickListenerList = menuClickListenerList
+    }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
@@ -55,7 +60,6 @@ class SlideSlipGroupView @JvmOverloads constructor(
             removeViewAt(i)
         }
         closeSlideGroup(false)
-
         for ((index, item) in list.withIndex()) {
             val textView = TextView(context)
             textView.text = item.content

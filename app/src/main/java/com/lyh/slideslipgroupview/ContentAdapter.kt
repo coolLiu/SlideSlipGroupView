@@ -24,9 +24,13 @@ class ContentAdapter : RecyclerView.Adapter<ContentAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bean = list[position]
-        holder.slideSlipGroupView.menuClickListenerList = { view, menuPosition, menuBean ->
+        holder.slideSlipGroupView.setMenuClickListenerList { view, menuPosition, menuBean ->
             holder.slideSlipGroupView.closeSlideGroup(true)
-            Toast.makeText(holder.itemView.context, "点击了${menuBean.content}  这是第${position + 1}条数据", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                holder.itemView.context,
+                "点击了${menuBean.content}  这是第${position + 1}条数据",
+                Toast.LENGTH_SHORT
+            ).show()
         }
         if (bean.slideDataList != null) {
             slideSlipRecyclerHelper.bindView(

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @Author lyh
  * @Date 2022/1/28
  *
- * 由于recyclerview的服用机制，导致滑动到其他的条目会展示之前的状态
+ * 由于recyclerview的复用机制，导致滑动到其他的条目会展示之前的状态
  * 创建一个helper解决这个问题
  **/
 class SlideSlipRecyclerHelper {
@@ -51,7 +51,6 @@ class SlideSlipRecyclerHelper {
 
     /**
      * 在适配器中bind时调用
-     * TODO 适配item不一样的情况
      */
     fun bindView(
         slideDataList: ArrayList<SlideSlipGroupView.SlideDataBean>,
@@ -62,7 +61,7 @@ class SlideSlipRecyclerHelper {
             slideSlipGroupViewList.add(slideSlipGroupView)
         }
         slideSlipGroupView.positionInRecycler = position
-        if (slideSlipGroupView.getSlideData() != null) {
+        if (slideSlipGroupView.getSlideData() != null && slideDataList == slideSlipGroupView.getSlideData()) {
             slideSlipGroupView.closeSlideGroup(false)
         } else {
             slideSlipGroupView.setSlideData(slideDataList)
