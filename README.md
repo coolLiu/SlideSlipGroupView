@@ -1,7 +1,7 @@
 # SlideSlipGroupView
 android 自定义侧滑view
-![img.png](img.png)
-![img_1.png](img_1.png)
-![img_2.png](img_2.png)
-![img_3.png](img_3.png)
+![img_0.jpg](img_0.jpg)
+![img_1.jpg](img_1.jpg)
+![img_2.jpg](img_2.jpg)
+![img_3.jpg](img_3.jpg)
 ![aa.gif](aa.gif)
