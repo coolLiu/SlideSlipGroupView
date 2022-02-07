@@ -15,11 +15,14 @@ class SlideSlipRecyclerHelper {
     private val slideSlipGroupViewList = ArrayList<SlideSlipGroupView>()
 
     /**
-     * 需要触摸屏幕时关闭已展开的菜单时使用
+     * 需要触摸屏幕时关闭已展开的菜单时使用，使用该方法的作用域仅为recyclerview布局内
      */
     fun attachToRecyclerView(recyclerView: RecyclerView) {
         recyclerView.addOnItemTouchListener(object : RecyclerView.OnItemTouchListener {
             override fun onInterceptTouchEvent(rv: RecyclerView, e: MotionEvent): Boolean {
+                if (rv.scrollState == RecyclerView.SCROLL_STATE_DRAGGING) {//如果recyclerview处于滑动状态  不处理  防止recyclerview快速滑动时手指在其他view上导致开启状态下的view关闭
+                    return false
+                }
                 if (hasOpenSlideView()) {
                     val view = rv.findChildViewUnder(e.x, e.y)
                     if (view != null) {
@@ -44,6 +47,7 @@ class SlideSlipRecyclerHelper {
 
         })
     }
+
 
     /**
      * 在适配器中bind时调用

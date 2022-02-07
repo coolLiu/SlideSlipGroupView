@@ -65,7 +65,9 @@ class RecyclerListActivity : AppCompatActivity() {
         mAdapter.list = list
         mAdapter.slideSlipRecyclerHelper.attachToRecyclerView(mRecyclerContent)
         mAdapter.notifyDataSetChanged()
+    }
 
-
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        return super.dispatchTouchEvent(ev)
     }
 }
